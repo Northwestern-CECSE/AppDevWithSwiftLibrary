@@ -24,6 +24,11 @@ public struct ImagePicker: UIViewControllerRepresentable {
     @Binding public var isShown: Bool
     @Binding public var image: Image?
     
+    public init(isShown: Binding<Bool>, image: Binding<Image?>) {
+        _isShown = isShown
+        _image = image
+    }
+    
     public func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
          
     }
