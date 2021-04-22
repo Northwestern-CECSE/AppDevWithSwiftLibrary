@@ -2,10 +2,10 @@ import Foundation
 import SwiftUI
 
 public class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    @Binding var isShown: Bool
-    @Binding var image: Image?
+    @Binding public var isShown: Bool
+    @Binding public var image: Image?
     
-    init(isShown: Binding<Bool>, image: Binding<Image?>) {
+    public init(isShown: Binding<Bool>, image: Binding<Image?>) {
         _isShown = isShown
         _image = image
     }
