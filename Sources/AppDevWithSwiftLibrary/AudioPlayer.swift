@@ -2,7 +2,7 @@ import Foundation
 import AVKit
 
 public class AudioPlayer {
-    static let shared = AudioPlayer()
+    public static let shared = AudioPlayer()
     var player: AVAudioPlayer?
     
     public func play(name: String, type: String) {
