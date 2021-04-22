@@ -1,11 +1,11 @@
 import Foundation
 import AVKit
 
-class AudioPlayer {
+public class AudioPlayer {
     static let shared = AudioPlayer()
     var player: AVAudioPlayer?
     
-    func play(name: String, type: String) {
+    public func play(name: String, type: String) {
         let sound = Bundle.main.path(forResource: name, ofType: type)
         if let sound = sound {
             do {
@@ -18,7 +18,7 @@ class AudioPlayer {
             print("AudioPlayer Error: File to play not found.")
         }
     }
-    func pause() {
+    public func pause() {
         if let p = player {
             p.pause()
         } else {
@@ -26,14 +26,14 @@ class AudioPlayer {
         }
     }
     
-    func stop() {
+    public func stop() {
         if let p = player {
             p.stop()
         } else {
             print("AudioPlayer Error: Player not initialized, cannot stop.")
         }
     }
-    func isPlaying() -> Bool {
+    public func isPlaying() -> Bool {
         if let p = player {
             return p.isPlaying
         } else {
