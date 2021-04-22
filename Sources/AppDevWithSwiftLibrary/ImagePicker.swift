@@ -27,12 +27,12 @@ public struct ImagePicker: UIViewControllerRepresentable {
     
     @Binding public var isShown: Bool
     @Binding public var image: Image?
-    @State public var source: SourceType
+    public var source: SourceType
     
-    public init(isShown: Binding<Bool>, image: Binding<Image?>, source: State<SourceType>) {
+    public init(isShown: Binding<Bool>, image: Binding<Image?>, source: SourceType) {
         _isShown = isShown
         _image = image
-        _source = source
+        self.source = source
     }
     
     public func askPermissionForCamera() {
