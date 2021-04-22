@@ -35,7 +35,7 @@ public struct ImagePicker: UIViewControllerRepresentable {
         self.source = source
     }
     
-    public func askPermissionForCamera() {
+    public static func askPermissionForCamera() {
         AVCaptureDevice.requestAccess(for: AVMediaType.video) { (success) in
             print(success)
         }
