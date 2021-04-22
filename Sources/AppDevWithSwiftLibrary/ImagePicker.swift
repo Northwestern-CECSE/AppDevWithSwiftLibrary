@@ -21,8 +21,8 @@ public class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, U
 }
 public struct ImagePicker: UIViewControllerRepresentable {
     
-    @Binding var isShown: Bool
-    @Binding var image: Image?
+    @Binding public var isShown: Bool
+    @Binding public var image: Image?
     
     public func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
          
