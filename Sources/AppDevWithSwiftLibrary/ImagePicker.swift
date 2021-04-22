@@ -21,13 +21,18 @@ public class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, U
     }
 }
 public struct ImagePicker: UIViewControllerRepresentable {
+    public enum SourceType {
+        case camera, photoLibrary
+    }
     
     @Binding public var isShown: Bool
     @Binding public var image: Image?
+    public var source: SourceType
     
-    public init(isShown: Binding<Bool>, image: Binding<Image?>) {
+    public init(isShown: Binding<Bool>, image: Binding<Image?>, theSource: SourceType) {
         _isShown = isShown
         _image = image
+        source = theSource
     }
     
     public func askPermissionForCamera() {
@@ -46,7 +51,11 @@ public struct ImagePicker: UIViewControllerRepresentable {
     
     public func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
         let picker = UIImagePickerController()
-        picker.sourceType = UIImagePickerController.SourceType.camera
+        if source == .camera {
+            picker.sourceType = UIImagePickerController.SourceType.camera
+        } else {
+            picker.sourceType = UIImagePickerController.SourceType.photoLibrary
+        }
         picker.delegate = context.coordinator
         return picker
     }
