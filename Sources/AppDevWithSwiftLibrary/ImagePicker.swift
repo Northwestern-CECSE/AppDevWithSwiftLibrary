@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import AVFoundation
 
 public class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     @Binding public var isShown: Bool
@@ -27,6 +28,12 @@ public struct ImagePicker: UIViewControllerRepresentable {
     public init(isShown: Binding<Bool>, image: Binding<Image?>) {
         _isShown = isShown
         _image = image
+    }
+    
+    public func askPermissionForCamera() {
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { (success) in
+            print(success)
+        }
     }
     
     public func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
