@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension UserDefaults {
+public extension UserDefaults {
     func setStructValue<T: Codable> (value: T, forKey: String) {
         let result = String(data: try! JSONEncoder().encode(value), encoding: .utf8)!
         UserDefaults.standard.setValue(result, forKey: forKey)
