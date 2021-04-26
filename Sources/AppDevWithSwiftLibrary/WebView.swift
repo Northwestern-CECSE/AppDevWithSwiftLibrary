@@ -12,6 +12,10 @@ public struct SwiftUIWebView: UIViewRepresentable {
     
     public let url: URL?
     
+    public init(url: URL) {
+        self.url = url
+    }
+    
     public func makeUIView(context: Context) -> some WKWebView {
         let prefs = WKWebpagePreferences()
         prefs.allowsContentJavaScript = true
