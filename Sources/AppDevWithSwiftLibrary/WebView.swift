@@ -10,7 +10,7 @@ import WebKit
 
 public struct SwiftUIWebView: UIViewRepresentable {
     
-    let url: URL?
+    public let url: URL?
     
     public func makeUIView(context: Context) -> some WKWebView {
         let prefs = WKWebpagePreferences()
