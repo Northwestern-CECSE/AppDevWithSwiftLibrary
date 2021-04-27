@@ -11,7 +11,7 @@ public class LocationFetcher: NSObject, CLLocationManagerDelegate {
     let manager = CLLocationManager()
     public var lastKnownLocation: CLLocationCoordinate2D?
 
-    override init() {
+    public override init() {
         super.init()
         manager.delegate = self
     }
