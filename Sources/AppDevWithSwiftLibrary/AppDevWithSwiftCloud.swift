@@ -3,7 +3,7 @@ import Foundation
 public class AppDevWithSwiftCloud {
     let appID: String
     let kUserIDKey = "com.wcl.AppDevWithSwiftCloud.kUserIDKey"
-    let kEndPoint = "http://trek.thewcl.com:14000"
+    let kEndPoint = "trek.thewcl.com:14000"
     var showJSONResults = true
     
     public init(appID: String, userID: String) {
