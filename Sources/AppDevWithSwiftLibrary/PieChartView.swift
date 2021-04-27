@@ -10,6 +10,12 @@ import SwiftUI
 public struct PieChartView: View {
     public var slices: [Double]
     public var colors: [Color]
+    
+    public init(slices: [Double], colors: [Color]) {
+        self.slices = slices
+        self.colors = colors
+    }
+    
     @State private var total = 0.0
     @State private var angles = [(Double, Double)]()
     public var body: some View {
