@@ -6,8 +6,10 @@ public class AppDevWithSwiftCloud {
     let kEndPoint = "http://trek.thewcl.com:14000"
     var showJSONResults = true
     
-    public init(appID: String) {
+    public init(appID: String, userID: String) {
         self.appID = appID
+        UserDefaults.standard.setValue(userID, forKey: kUserIDKey)
+        UserDefaults.standard.synchronize()
     }
     
     public func getUserID() -> String {
@@ -33,7 +35,10 @@ public class AppDevWithSwiftCloud {
     }
     
     public func save<T:Codable>(data: T) {
-        guard let userID = UserDefaults.standard.value(forKey: kUserIDKey) as? String else {return}
+        guard let userID = UserDefaults.standard.value(forKey: kUserIDKey) as? String else {
+            print ("No user ID set.  Run getUserID() atleast once when starting up your app")
+            return
+        }
         let url = URL(string: "http://\(kEndPoint)/\(appID)/\(userID)/\(T.self)")!
         var request = URLRequest(url: url)
         displayRequest(request: request)
