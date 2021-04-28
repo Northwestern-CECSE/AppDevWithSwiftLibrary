@@ -1,3 +1,10 @@
+//
+//  AppDevWithSwiftCloud.swift
+//  ChatApp
+//
+//  Created by Kevin McQuown on 4/28/21.
+//
+
 import Foundation
 
 public class AppDevWithSwiftCloud {
@@ -51,6 +58,55 @@ public class AppDevWithSwiftCloud {
         task.resume()
     }
     
+    public func get<T: Codable>(dummy: T, queries:[String : Any], complete: @escaping (([T]) -> Void)) {
+        var urlString = "http://\(kEndPoint)/\(appID)/\(T.self)"
+        if queries.keys.count > 0 {
+            urlString += "?"
+            for (key, value) in queries {
+                urlString += "\(key)=\(value)"
+            }
+        }
+        let url = URL(string: urlString)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        displayRequest(request: request)
+        let task = URLSession.shared.dataTask(with: request) {data, response, error in
+            guard error == nil else { print(error!.localizedDescription); return}
+            if let data = data {
+                self.logResult(data)
+                let result = try? JSONDecoder().decode([T].self, from: data)
+                complete(result ?? [])
+            } else {
+                complete([])
+            }
+        }
+        task.resume()
+    }
+    public func delete<T: Codable>(dummy: T, queries:[String : Any], complete: @escaping (([T]) -> Void)) {
+        var urlString = "http://\(kEndPoint)/\(appID)/\(T.self)"
+        if queries.keys.count > 0 {
+            urlString += "?"
+            for (key, value) in queries {
+                urlString += "\(key)=\(value)"
+            }
+        }
+        let url = URL(string: urlString)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        displayRequest(request: request)
+        let task = URLSession.shared.dataTask(with: request) {data, response, error in
+            guard error == nil else { print(error!.localizedDescription); return}
+            if let data = data {
+                self.logResult(data)
+                let result = try? JSONDecoder().decode([T].self, from: data)
+                complete(result ?? [])
+            } else {
+                complete([])
+            }
+        }
+        task.resume()
+    }
+
     public func getAll<T: Codable>(dummy: T, complete: @escaping (([T]) -> Void)) {
         let url = URL(string: "http://\(kEndPoint)/\(appID)/\(T.self)")!
         var request = URLRequest(url: url)
