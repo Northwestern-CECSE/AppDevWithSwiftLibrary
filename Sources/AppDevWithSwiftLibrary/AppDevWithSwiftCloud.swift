@@ -11,6 +11,7 @@ public class AppDevWithSwiftCloud {
     let appID: String
     let kUserIDKey = "com.wcl.AppDevWithSwiftCloud.kUserIDKey"
     let kEndPoint = "trek.thewcl.com:14000"
+//    let kEndPoint = "localhost:14000"
     var showJSONResults = true
     
     public init(appID: String, userID: String) {
@@ -124,7 +125,21 @@ public class AppDevWithSwiftCloud {
         }
         task.resume()
     }
-    
+
+    public func deleteByID<T:Codable>(dummy: T, id: String) {
+        let url = URL(string: "http://\(kEndPoint)/\(appID)/\(T.self)/\(id)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        displayRequest(request: request)
+        let task = URLSession.shared.dataTask(with: request) {data, response, error in
+            guard error == nil else { print(error!.localizedDescription); return}
+            if let data = data {
+                self.logResult(data)
+            }
+        }
+        task.resume()
+    }
+
     public func getByID<T:Codable>(dummy: T, id: String, complete: @escaping ((T?) -> Void)) {
         let url = URL(string: "http://\(kEndPoint)/\(appID)/\(T.self)/\(id)")!
         var request = URLRequest(url: url)
