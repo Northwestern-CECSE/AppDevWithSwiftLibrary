@@ -5,15 +5,17 @@ import AVFoundation
 public class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     @Binding public var isShown: Bool
     @Binding public var image: Image?
+    @Binding public var imagePNG: UIImage?
     
-    public init(isShown: Binding<Bool>, image: Binding<Image?>) {
+    public init(isShown: Binding<Bool>, image: Binding<Image?>, imagePNG: Binding<UIImage?>) {
         _isShown = isShown
         _image = image
+        _imagePNG = imagePNG
     }
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let uiImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        let data = uiImage.pngData()
+        imagePNG = uiImage
         image = Image(uiImage: uiImage)
         isShown = false  // close the image picker controller
     }
@@ -28,11 +30,13 @@ public struct ImagePicker: UIViewControllerRepresentable {
     
     @Binding public var isShown: Bool
     @Binding public var image: Image?
+    @Binding public var imagePNG: UIImage?
     public var source: SourceType
     
-    public init(isShown: Binding<Bool>, image: Binding<Image?>, source: SourceType) {
+    public init(isShown: Binding<Bool>, image: Binding<Image?>, imagePNG: Binding<UIImage?>, source: SourceType) {
         _isShown = isShown
         _image = image
+        _imagePNG = imagePNG
         self.source = source
     }
     
@@ -47,7 +51,7 @@ public struct ImagePicker: UIViewControllerRepresentable {
     }
     
     public func makeCoordinator() -> ImagePickerCoordinator {
-        return ImagePickerCoordinator(isShown: $isShown, image: $image)
+        return ImagePickerCoordinator(isShown: $isShown, image: $image, imagePNG: $imagePNG)
     }
     
     public func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {

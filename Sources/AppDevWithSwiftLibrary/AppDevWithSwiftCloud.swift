@@ -31,7 +31,7 @@ public class AppDevWithSwiftCloud {
     }
     
     public func saveImage(name: String, imageData: Data) {
-        var request = URLRequest(url: URL(string: "\(kEndPoint)/")!,timeoutInterval: Double.infinity)
+        var request = URLRequest(url: URL(string: "http://\(kEndPoint)/")!,timeoutInterval: Double.infinity)
         request.addValue("image/png", forHTTPHeaderField: "Content-Type")
 
         request.httpMethod = "POST"
