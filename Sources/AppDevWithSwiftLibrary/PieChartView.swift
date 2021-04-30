@@ -10,14 +10,15 @@ import SwiftUI
 public struct PieChartView: View {
     @State var slices: [Double]
     @State var colors: [Color]
-    @State private var total = 0.0
-    @State private var angles = [(Double, Double)]()
 
     public init(slices: [Double], colors: [Color]) {
         self.slices = slices
         self.colors = colors
     }
-    
+
+    @State private var total = 0.0
+    @State private var angles = [(Double, Double)]()
+
     public var body: some View {
         GeometryReader { geometry in
             ForEach (slices.indices, id: \.self) { index in
