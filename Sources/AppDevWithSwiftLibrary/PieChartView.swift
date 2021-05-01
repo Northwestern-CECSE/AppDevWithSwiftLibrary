@@ -36,8 +36,6 @@ public struct PieChartView: View {
                 }
             }.onChange(of: slices, perform: { value in
                 total = value.reduce(0, +)
-                print(value.count)
-                print(total)
                 angles.removeAll()
                 var startAngle = 0.0
                 for slice in value {
@@ -59,7 +57,6 @@ public struct PieChartView: View {
             angles.append((startAngle, endAngle))
             startAngle = endAngle
         }
-        print(angles.count)
     }
 }
 
