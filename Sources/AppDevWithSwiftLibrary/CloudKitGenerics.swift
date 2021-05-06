@@ -8,7 +8,30 @@
 import Foundation
 import CloudKit
 
-//let iCloudContainer = "iCloud.com.thewcl.arti.EHealthMobile"
+public struct CloudKitSupport {
+    public static func initializeContainer(name: String) {
+        UserDefaults.standard.setValue(name, forKey: Bundle.main.bundleIdentifier! + ".CloudKitContainer")
+    }
+    
+    public static func defaultContainter() -> CKContainer {
+        if let id = UserDefaults.standard.value(forKey: Bundle.main.bundleIdentifier! + ".CloudKitContainer") as? String {
+            return CKContainer(identifier: id)
+        } else {
+            print("error, initializeContainer not called at startup, returning the default based on bundle identifier")
+            return CloudKitSupport.defaultContainter()
+        }
+    }
+}
+
+public func getUserID(complete: @escaping (String) -> Void) {
+    CloudKitSupport.defaultContainter().fetchUserRecordID { (recordID, error) in
+        if let error = error {
+            print(error.localizedDescription)
+        } else {
+            complete(recordID?.recordName ?? "no record name")
+        }
+    }
+}
 
 public protocol SimplyInitializable {
     init()
@@ -21,15 +44,6 @@ public protocol CloudKitProtocol: SimplyInitializable {
     var id: UUID { get }
 }
 
-public func getUserID(complete: @escaping (String) -> Void) {
-    CKContainer.default().fetchUserRecordID { (recordID, error) in
-        if let error = error {
-            print(error.localizedDescription)
-        } else {
-            complete(recordID?.recordName ?? "no record name")
-        }
-    }
-}
 
 public func getCloudKitByIDs<T: CloudKitProtocol>(_ ids: [String], swiftType: T, complete: @escaping ([T]) -> Void) {
     var items = [T]()
@@ -53,7 +67,7 @@ public func getCloudKitByIDs<T: CloudKitProtocol>(_ ids: [String], swiftType: T,
 
 public func getCloudKitByID<T: CloudKitProtocol>(_ id: String, dummy: T, complete: @escaping (T?) -> Void) {
     let id = CKRecord.ID(recordName: id)
-    let container = CKContainer.default()
+    let container = CloudKitSupport.defaultContainter()
     container.publicCloudDatabase.fetch(withRecordID: id) { (ckrecord, error) in
         DispatchQueue.main.async {
             if let ckrecord = ckrecord {
@@ -66,7 +80,7 @@ public func getCloudKitByID<T: CloudKitProtocol>(_ id: String, dummy: T, complet
 }
 public func deleteCloudKitByID<T: CloudKitProtocol> (_ id: String, dummy: T, complete: @escaping () -> Void) {
     let id = CKRecord.ID(recordName: id)
-    let container = CKContainer.default()
+    let container = CloudKitSupport.defaultContainter()
     container.publicCloudDatabase.delete(withRecordID: id) { (record, error) in
         if let error = error {
             print(error.localizedDescription)
@@ -78,7 +92,7 @@ public func deleteCloudKitByID<T: CloudKitProtocol> (_ id: String, dummy: T, com
 }
 
 public func createSubscription(recordType: String, predicate: NSPredicate, resultingSubscription: @escaping ((CKSubscription?, Error?) -> Void)) {
-    let db = CKContainer.default().publicCloudDatabase
+    let db = CloudKitSupport.defaultContainter().publicCloudDatabase
     let sub = CKQuerySubscription(recordType: recordType, predicate: predicate, options: [.firesOnRecordUpdate, .firesOnRecordCreation, .firesOnRecordDeletion])
     print("created subscription id: \(sub.subscriptionID)")
     let notification = CKSubscription.NotificationInfo()
@@ -98,7 +112,7 @@ public func createSubscription(recordType: String, predicate: NSPredicate, resul
 }
 
 public func fetchAndRemoveAllCloudKitSubscriptions() {
-    let db = CKContainer.default().publicCloudDatabase
+    let db = CloudKitSupport.defaultContainter().publicCloudDatabase
     db.fetchAllSubscriptions { (subscriptions, error) in
         if let subscriptions = subscriptions {
             for sub in subscriptions {
@@ -112,7 +126,7 @@ public func fetchAndRemoveAllCloudKitSubscriptions() {
 }
 
 public func saveToICloud<T: CloudKitProtocol>(record: T, complete: @escaping (CKRecord?, Error?) -> Void) {
-    let container = CKContainer.default()
+    let container = CloudKitSupport.defaultContainter()
     let id = CKRecord.ID(recordName: record.id.uuidString)
     container.publicCloudDatabase.fetch(withRecordID: id) { (ckrecord, error) in
         if var ckrecord = ckrecord {
@@ -194,7 +208,7 @@ public func queryCloudKit<T: CloudKitProtocol>(recordType: String,
             newQuery.queryCompletionBlock = queryOperation.queryCompletionBlock
             newQuery.cursor = cursor
             newQuery.qualityOfService = queryOperation.qualityOfService
-            CKContainer.default().publicCloudDatabase.add(newQuery)
+            CloudKitSupport.defaultContainter().publicCloudDatabase.add(newQuery)
             let batch = items
             complete(batch, true)
             items.removeAll()
@@ -205,7 +219,7 @@ public func queryCloudKit<T: CloudKitProtocol>(recordType: String,
         }
     }
     queryOperation.qualityOfService = .userInteractive
-    CKContainer.default().publicCloudDatabase.add(queryOperation)
+    CloudKitSupport.defaultContainter().publicCloudDatabase.add(queryOperation)
 }
 
 public func queryCloudKit<T: CloudKitProtocol>(recordType: String,
@@ -256,7 +270,7 @@ public func queryCloudKit<T: CloudKitProtocol>(recordType: String,
         }
     }
     queryOperation.qualityOfService = .userInteractive
-    CKContainer.default().publicCloudDatabase.add(queryOperation)
+    CloudKitSupport.defaultContainter().publicCloudDatabase.add(queryOperation)
 }
 
 // checking intersection of two string arrays
@@ -286,7 +300,7 @@ public func queryContainsCloudKit<T: CloudKitProtocol>(recordType: String,
         }
     }
     queryOperation.qualityOfService = .userInteractive
-    CKContainer.default().publicCloudDatabase.add(queryOperation)
+    CloudKitSupport.defaultContainter().publicCloudDatabase.add(queryOperation)
 }
 
 public func queryInCloudKit<T: CloudKitProtocol>(recordType: String,
@@ -316,5 +330,5 @@ public func queryInCloudKit<T: CloudKitProtocol>(recordType: String,
         }
     }
     queryOperation.qualityOfService = .userInteractive
-    CKContainer.default().publicCloudDatabase.add(queryOperation)
+    CloudKitSupport.defaultContainter().publicCloudDatabase.add(queryOperation)
 }
