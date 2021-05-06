@@ -10,18 +10,18 @@ import CloudKit
 
 //let iCloudContainer = "iCloud.com.thewcl.arti.EHealthMobile"
 
-protocol SimplyInitializable {
+public protocol SimplyInitializable {
     init()
 }
 
-protocol CloudKitProtocol: SimplyInitializable {
+public protocol CloudKitProtocol: SimplyInitializable {
     associatedtype ModelType
     static func fromCloudKit(record: CKRecord) -> ModelType
     var cloudKit: CKRecord { get }
     var id: UUID { get }
 }
 
-func getUserID(complete: @escaping (String) -> Void) {
+public func getUserID(complete: @escaping (String) -> Void) {
     CKContainer.default().fetchUserRecordID { (recordID, error) in
         if let error = error {
             print(error.localizedDescription)
@@ -31,7 +31,7 @@ func getUserID(complete: @escaping (String) -> Void) {
     }
 }
 
-func getCloudKitByIDs<T: CloudKitProtocol>(_ ids: [String], swiftType: T, complete: @escaping ([T]) -> Void) {
+public func getCloudKitByIDs<T: CloudKitProtocol>(_ ids: [String], swiftType: T, complete: @escaping ([T]) -> Void) {
     var items = [T]()
     let group = DispatchGroup()
     
@@ -51,7 +51,7 @@ func getCloudKitByIDs<T: CloudKitProtocol>(_ ids: [String], swiftType: T, comple
     }
 }
 
-func getCloudKitByID<T: CloudKitProtocol>(_ id: String, dummy: T, complete: @escaping (T?) -> Void) {
+public func getCloudKitByID<T: CloudKitProtocol>(_ id: String, dummy: T, complete: @escaping (T?) -> Void) {
     let id = CKRecord.ID(recordName: id)
     let container = CKContainer.default()
     container.publicCloudDatabase.fetch(withRecordID: id) { (ckrecord, error) in
@@ -64,7 +64,7 @@ func getCloudKitByID<T: CloudKitProtocol>(_ id: String, dummy: T, complete: @esc
         }
     }
 }
-func deleteCloudKitByID<T: CloudKitProtocol> (_ id: String, dummy: T, complete: @escaping () -> Void) {
+public func deleteCloudKitByID<T: CloudKitProtocol> (_ id: String, dummy: T, complete: @escaping () -> Void) {
     let id = CKRecord.ID(recordName: id)
     let container = CKContainer.default()
     container.publicCloudDatabase.delete(withRecordID: id) { (record, error) in
@@ -77,7 +77,7 @@ func deleteCloudKitByID<T: CloudKitProtocol> (_ id: String, dummy: T, complete: 
     }
 }
 
-func createSubscription(recordType: String, predicate: NSPredicate, resultingSubscription: @escaping ((CKSubscription?, Error?) -> Void)) {
+public func createSubscription(recordType: String, predicate: NSPredicate, resultingSubscription: @escaping ((CKSubscription?, Error?) -> Void)) {
     let db = CKContainer.default().publicCloudDatabase
     let sub = CKQuerySubscription(recordType: recordType, predicate: predicate, options: [.firesOnRecordUpdate, .firesOnRecordCreation, .firesOnRecordDeletion])
     print("created subscription id: \(sub.subscriptionID)")
@@ -97,7 +97,7 @@ func createSubscription(recordType: String, predicate: NSPredicate, resultingSub
     }
 }
 
-func fetchAndRemoveAllCloudKitSubscriptions() {
+public func fetchAndRemoveAllCloudKitSubscriptions() {
     let db = CKContainer.default().publicCloudDatabase
     db.fetchAllSubscriptions { (subscriptions, error) in
         if let subscriptions = subscriptions {
@@ -111,7 +111,7 @@ func fetchAndRemoveAllCloudKitSubscriptions() {
     }
 }
 
-func saveToICloud<T: CloudKitProtocol>(record: T, complete: @escaping (CKRecord?, Error?) -> Void) {
+public func saveToICloud<T: CloudKitProtocol>(record: T, complete: @escaping (CKRecord?, Error?) -> Void) {
     let container = CKContainer.default()
     let id = CKRecord.ID(recordName: record.id.uuidString)
     container.publicCloudDatabase.fetch(withRecordID: id) { (ckrecord, error) in
@@ -141,14 +141,14 @@ func saveToICloud<T: CloudKitProtocol>(record: T, complete: @escaping (CKRecord?
     }
 }
 
-func subscribeCloudKit<T: CloudKitProtocol>(recordType: String,
+public func subscribeCloudKit<T: CloudKitProtocol>(recordType: String,
                                             dummy: T,
                                             fieldsToQuery: [String: Any?],
                                             complete: @escaping ((Error) -> Void)) {
     ()
 }
 
-func queryCloudKit<T: CloudKitProtocol>(recordType: String,
+public func queryCloudKit<T: CloudKitProtocol>(recordType: String,
                                         dummy: T,
                                         fieldsToQuery: [String: Any?],
                                         sortDescriptors: [NSSortDescriptor],
@@ -208,14 +208,14 @@ func queryCloudKit<T: CloudKitProtocol>(recordType: String,
     CKContainer.default().publicCloudDatabase.add(queryOperation)
 }
 
-func queryCloudKit<T: CloudKitProtocol>(recordType: String,
+public func queryCloudKit<T: CloudKitProtocol>(recordType: String,
                                         swiftType: T, complete: @escaping (([T]) -> Void)) {
     queryCloudKit(recordType: recordType, swiftType: swiftType, fieldsToQuery: [:], sortDescriptors: []) { (results) in
         complete(results)
     }
 }
 
-func queryCloudKit<T: CloudKitProtocol>(recordType: String,
+public func queryCloudKit<T: CloudKitProtocol>(recordType: String,
                                         swiftType: T,
                                         fieldsToQuery: [String: Any?],
                                         sortDescriptors: [NSSortDescriptor], complete: @escaping (([T]) -> Void)) {
@@ -260,7 +260,7 @@ func queryCloudKit<T: CloudKitProtocol>(recordType: String,
 }
 
 // checking intersection of two string arrays
-func queryContainsCloudKit<T: CloudKitProtocol>(recordType: String,
+public func queryContainsCloudKit<T: CloudKitProtocol>(recordType: String,
                                         swiftType: T,
                                         key: String,
                                         values: [String],
@@ -289,7 +289,7 @@ func queryContainsCloudKit<T: CloudKitProtocol>(recordType: String,
     CKContainer.default().publicCloudDatabase.add(queryOperation)
 }
 
-func queryInCloudKit<T: CloudKitProtocol>(recordType: String,
+public func queryInCloudKit<T: CloudKitProtocol>(recordType: String,
                                         swiftType: T,
                                         key: String,
                                         values: [String],
