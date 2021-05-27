@@ -55,7 +55,7 @@ Yes, we can easily scan for these two types of codes and get back the string the
 (https://www.notion.so/Generating-a-Pie-Chart-c12e5663c96441eaaadeaf81829e9c5b)
 
 ### Saving and retrieving data to the cloud
-Normally you would need a developer license to access Apple's CloudKit framework. To avoid this complexity we have built a simple mechanism for saving and retrieving data to and from the cloud. It does not require any special credentials from the developer or user.  Note that this mechanism is not super secure so you should use this *only* for educational purposes in your class.<br>
+Normally you would need a developer license to access Apple's CloudKit framework. To avoid this complexity we have built a simple mechanism for saving and retrieving data to and from the cloud. It does not require any special credentials from the developer or user.  Note that this mechanism is not super secure so you should use this *only* for educational purposes in your class.<br><br>
 (https://www.notion.so/Saving-and-Retrieving-Data-to-the-Cloud-308deff2d91947d99d38b969ba2f3381)
 
 
