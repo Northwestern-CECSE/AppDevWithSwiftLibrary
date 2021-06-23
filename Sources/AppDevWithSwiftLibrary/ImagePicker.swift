@@ -62,6 +62,7 @@ public struct ImagePicker: UIViewControllerRepresentable {
             picker.sourceType = UIImagePickerController.SourceType.photoLibrary
         }
         picker.delegate = context.coordinator
+        picker.mediaTypes = ["public.image", "public.movie"]
         return picker
     }
 }
