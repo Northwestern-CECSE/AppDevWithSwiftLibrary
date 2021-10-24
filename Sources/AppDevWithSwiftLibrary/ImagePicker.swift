@@ -1,3 +1,5 @@
+#if !os(watchOS)
+
 import Foundation
 import SwiftUI
 import AVFoundation
@@ -73,3 +75,4 @@ public struct ImagePicker: UIViewControllerRepresentable {
         return picker
     }
 }
+#endif
