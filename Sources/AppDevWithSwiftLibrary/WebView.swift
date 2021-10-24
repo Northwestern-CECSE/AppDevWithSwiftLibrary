@@ -5,6 +5,7 @@
 //  Created by Kevin McQuown on 4/26/21.
 //
 
+#if !os(watchOS)
 import SwiftUI
 import WebKit
 
@@ -38,3 +39,4 @@ public extension View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
+#endif
