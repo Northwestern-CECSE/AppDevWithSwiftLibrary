@@ -1,3 +1,4 @@
+#if !os(watchOS)
 import AVFoundation
 import SwiftUI
 
@@ -332,3 +333,4 @@ public struct CodeScannerView: UIViewControllerRepresentable {
 
     }
 }
+#endif
