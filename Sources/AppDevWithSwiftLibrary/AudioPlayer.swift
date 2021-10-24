@@ -1,3 +1,5 @@
+#if !os(watchOS)
+
 import Foundation
 import AVKit
 
@@ -42,3 +44,5 @@ public class AudioPlayer {
         return false
     }
 }
+
+#endif
