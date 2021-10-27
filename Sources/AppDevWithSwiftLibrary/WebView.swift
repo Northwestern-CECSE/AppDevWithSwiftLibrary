@@ -5,7 +5,7 @@
 //  Created by Kevin McQuown on 4/26/21.
 //
 
-#if !os(watchOS)
+#if os(iOS)
 import SwiftUI
 import WebKit
 
